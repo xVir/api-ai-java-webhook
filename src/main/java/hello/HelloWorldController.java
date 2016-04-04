@@ -1,12 +1,13 @@
 package hello;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/hello-world")
+@RequestMapping("/webhook")
 public class HelloWorldController {
 
     @RequestMapping(method = RequestMethod.POST)
