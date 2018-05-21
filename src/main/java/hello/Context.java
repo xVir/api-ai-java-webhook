@@ -9,6 +9,18 @@ public class Context {
     private Parameters parameters;
     @SerializedName("date-time")
     private String dateTime;
+
+    public String getDateTimeOriginal() {
+        return dateTimeOriginal;
+    }
+
+    public void setDateTimeOriginal(String dateTimeOriginal) {
+        this.dateTimeOriginal = dateTimeOriginal;
+    }
+
+    @SerializedName("date-time.original")
+
+    private String dateTimeOriginal;
     private String activity;
     private Address address;
     private String temperature;
