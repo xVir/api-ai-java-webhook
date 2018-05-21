@@ -2,6 +2,7 @@ package hello;
 
 import com.github.fedy2.weather.YahooWeatherService;
 import com.github.fedy2.weather.data.Channel;
+import com.github.fedy2.weather.data.Forecast;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -43,17 +47,24 @@ public class HelloWorldController {
             mapcity(weatherRequest.getResult().getParameters().getAddress().getCity(),weatherRequest);
         }
 
-        //parameters
-        //fulfillment.speech
         String speach="Sorry for inconvenicnec";
         YahooWeatherService service = new YahooWeatherService();
         String action=weatherRequest.getResult().getAction();
         String typeOfDay;
         switch (action) {
             case "weather":
-                case "weather.temperature":
+            case "weather.temperature":
                     String city=weatherRequest.getResult().getParameters().getAddress().getCity();
                     String dateTime=weatherRequest.getResult().getParameters().getDateTime();
+                String dateTimeOrginal="Today";
+                    try {
+                        dateTimeOrginal = weatherRequest.getResult().getParameters().getDateTimeOriginal() != null ? weatherRequest.getResult().getParameters().getDateTimeOriginal() : weatherRequest.getResult().getContexts().get(0).getParameters().getDateTimeOriginal();
+                    }catch (Exception  e){
+
+                    }
+                    if(dateTimeOrginal==null||dateTimeOrginal.isEmpty()){
+                        dateTimeOrginal=dateTime;
+                    }
                     String unit=weatherRequest.getResult().getParameters().getUnit();
                     DegreeUnit degreeUnit;
                     if(unit!=null&&unit.equalsIgnoreCase("F")){
@@ -66,8 +77,22 @@ public class HelloWorldController {
 
                         for (Channel channel:channels) {
                             System.out.println(channel.toString());
-                               speach= "Today in "+ channel.getLocation().getCity() + ": " + channel.getItem().getCondition().getText() +
-                                    ", the temperature is " + channel.getItem().getCondition().getTemp() + " " + channel.getUnits().getTemperature();
+                            if(dateTimeOrginal.equalsIgnoreCase("Today")) {
+                                speach = dateTimeOrginal + " in " + channel.getLocation().getCity() + ": " + channel.getItem().getCondition().getText() +
+                                        "," +
+                                        " the temperature is " + channel.getItem().getCondition().getTemp() + " " + channel.getUnits().getTemperature();
+                            }
+                            else{
+
+                                Forecast forecastExpected=findTemperatureData(channel.getItem().getForecasts(),dateTime);
+                                if(dateTimeOrginal.contains("-")){
+                                    dateTimeOrginal=forecastExpected.getDay().toString()+"DAY";
+                                }
+                                speach = dateTimeOrginal + " in " + channel.getLocation().getCity() + ": " +forecastExpected.getText() +
+                                        "," +
+                                        " the highest temperature is " + forecastExpected.getHigh()+
+                                        " and the Lowest temperature is " + forecastExpected.getLow() + " " + channel.getUnits().getTemperature() ;
+                            }
                         }
 
                     }
@@ -95,6 +120,37 @@ public class HelloWorldController {
 
         return new WebhookResponse(speach, speach);
     }
+
+    private Forecast findTemperatureData(List<Forecast> forecasts ,String dateTime) {
+        SimpleDateFormat format =
+                new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat old =
+                new SimpleDateFormat("yyyy-MM-dd");
+        Forecast forecastExpected=null;
+        try {
+            Date parsed = old.parse(dateTime);
+            String date=format.format(parsed);
+            for (Forecast forecast:forecasts
+                    ) {
+               if(forecast.getDate().compareTo(parsed)==0){
+                   forecastExpected=forecast;
+                   break;
+               }
+
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+        return forecastExpected;
+    }
+
 
     private void mapcity(String city, WeatherRequest weatherRequest) {
         if(city==null||city.equalsIgnoreCase("")){
@@ -130,6 +186,7 @@ public class HelloWorldController {
 
 
     }
+
 
 
 }
