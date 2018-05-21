@@ -1,8 +1,13 @@
 package hello;
 
+import com.google.gson.annotations.SerializedName;
+
+import javax.xml.bind.annotation.XmlElement;
+
 public class Context {
     private String name;
     private Parameters parameters;
+    @SerializedName("date-time")
     private String dateTime;
     private String activity;
     private Address address;
