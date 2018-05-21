@@ -1,10 +1,17 @@
 package hello;
 
+import com.google.gson.annotations.SerializedName;
+
+import javax.xml.bind.annotation.XmlElement;
+
 public class Address {
 
     private String city;//city
+    @SerializedName( "business-name")
     private String businessName;//business-name
+    @SerializedName("admin-area")
     private String adminArea;//admin-area
+    @SerializedName( "subadmin-area")
     private String subadminArea;//subadmin-area
 
     public String getCity() {
