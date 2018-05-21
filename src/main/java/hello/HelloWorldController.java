@@ -51,6 +51,7 @@ public class HelloWorldController {
         String typeOfDay;
         switch (action) {
             case "weather":
+                case "weather.temperature":
                     String city=weatherRequest.getResult().getParameters().getAddress().getCity();
                     String dateTime=weatherRequest.getResult().getParameters().getDateTime();
                     String unit=weatherRequest.getResult().getParameters().getUnit();
