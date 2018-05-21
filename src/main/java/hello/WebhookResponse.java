@@ -5,6 +5,7 @@ public class WebhookResponse {
     private final String displayText;
 
     private final String source = "java-webhook";
+    private  String test;
 
     public WebhookResponse(String speech, String displayText) {
         this.speech = speech;
@@ -21,5 +22,9 @@ public class WebhookResponse {
 
     public String getSource() {
         return source;
+    }
+
+    public String getTest() {
+        return test;
     }
 }
