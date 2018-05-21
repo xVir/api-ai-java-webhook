@@ -5,10 +5,20 @@ import com.google.gson.annotations.SerializedName;
 public class Parameters {
     @SerializedName("date-time")
     private String dateTime;
+    @SerializedName("date-time.original")
+    private String dateTimeOriginal;
     private String activity;
     private Address address;
     private String temperature;
     private String unit;
+
+    public String getDateTimeOriginal() {
+        return dateTimeOriginal;
+    }
+
+    public void setDateTimeOriginal(String dateTimeOriginal) {
+        this.dateTimeOriginal = dateTimeOriginal;
+    }
 
     public String getDateTime() {
         return dateTime;
