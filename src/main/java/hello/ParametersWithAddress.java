@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public class ParametersWithAddress {
     @SerializedName("date-time")
     private String dateTime;
+    @SerializedName("date-time.original")
+    private String dateTimeOriginal;
     private String activity;
     private String address;
     private String temperature;
@@ -12,6 +14,14 @@ public class ParametersWithAddress {
 
     public String getDateTime() {
         return dateTime;
+    }
+
+    public String getDateTimeOriginal() {
+        return dateTimeOriginal;
+    }
+
+    public void setDateTimeOriginal(String dateTimeOriginal) {
+        this.dateTimeOriginal = dateTimeOriginal;
     }
 
     public void setDateTime(String dateTime) {
