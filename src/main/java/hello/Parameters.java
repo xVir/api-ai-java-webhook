@@ -1,7 +1,9 @@
 package hello;
 
-public class Parameters {
+import com.google.gson.annotations.SerializedName;
 
+public class Parameters {
+    @SerializedName("date-time")
     private String dateTime;
     private String activity;
     private Address address;
